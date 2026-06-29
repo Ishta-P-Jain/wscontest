@@ -5,7 +5,8 @@
 			"Likibp",
 			"MathXplore",
 			"Omotecho",
-			"Shirayuki"
+			"Shirayuki",
+			"Tensama0415"
 		]
 	},
 	"app-title": "ウィキソース・コンテスト",
@@ -14,7 +15,7 @@
 	"login": "ログイン",
 	"logged-in-as": "$1 としてログインしています",
 	"logout": "ログアウト",
-	"stats-summary": "$2 {{PLURAL:$2|コンテスト}}の参加者は$1 {{PLURAL:$1|人}} でした。",
+	"stats-summary": "$3 {{PLURAL:$4|コンテスト}}の参加者{{PLURAL:$2|は $1 人}} でした。",
 	"all-contests": "すべてのコンテスト",
 	"create-contest": "コンテストを作成",
 	"edit-contest": "コンテストの設定を編集",
