@@ -159,18 +159,18 @@ class ContestRepository extends RepositoryBase {
 	 * @return bool
 	 */
 	public function hasAdmin( string $contestId, string $adminUsername ): bool {
-       $sql = 'SELECT contests.*
-           FROM contests
-               JOIN admins ON ( contests.id = admins.contest_id )
-               JOIN users ON ( admins.user_id = users.id )
-           WHERE contests.id = :contest_id
-               AND REPLACE( users.name, "_", " " ) = REPLACE( :username, "_", " " )
-           LIMIT 1';
-       $stmt = $this->db->prepare( $sql );
-       $stmt->bindValue( 'contest_id', $contestId );
-       $stmt->bindValue( 'username', $adminUsername );
-       return $stmt->executeQuery()->rowCount() > 0;
-   }
+		$sql = 'SELECT contests.*
+			FROM contests
+				JOIN admins ON ( contests.id = admins.contest_id )
+				JOIN users ON ( admins.user_id = users.id )
+			WHERE contests.id = :contest_id
+				AND REPLACE( users.name, "_", " " ) = REPLACE( :username, "_", " " )
+			LIMIT 1';
+		$stmt = $this->db->prepare( $sql );
+		$stmt->bindValue( 'contest_id', $contestId );
+		$stmt->bindValue( 'username', $adminUsername );
+		return $stmt->executeQuery()->rowCount() > 0;
+	}
 
 	/**
 	 * @param string $contestId
@@ -274,8 +274,9 @@ class ContestRepository extends RepositoryBase {
 	 */
 	public function canBeViewedBy( array $contest, ?string $username ): bool {
 		$isAdmin = false;
+		$normalizedUsername = $username !== null ? trim( str_replace( '_', ' ', $username ) ) : null;
 		foreach ( $contest['admins'] as $admin ) {
-			$isAdmin = $isAdmin || $admin['name'] === $username;
+			$isAdmin = $isAdmin || trim( str_replace( '_', ' ', $admin['name'] ) ) === $normalizedUsername;
 		}
 		if ( $isAdmin ) {
 			return true;

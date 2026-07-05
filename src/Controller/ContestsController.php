@@ -38,7 +38,7 @@ class ContestsController extends AbstractController {
 	 * @return string
 	 */
 	private static function normalizeUsername( string $username ): string {
-		return str_replace( '_', ' ', trim( $username ) );
+		return trim( str_replace( '_', ' ', $username ) );
 	}
 
 	/**
@@ -145,8 +145,7 @@ class ContestsController extends AbstractController {
 			$isAdmin = false;
 			foreach ( $contest['admins'] as $admin ) {
 				$admins .= $admin['name'] . "\n";
-				$isAdmin = $isAdmin
-					|| self::normalizeUsername( $admin['name'] ) === self::normalizeUsername( $username );
+				$isAdmin = $isAdmin|| self::normalizeUsername( $admin['name'] ) === self::normalizeUsername( $username );
 			}
 			if ( !$isAdmin ) {
 				throw $this->createAccessDeniedException();
@@ -237,6 +236,8 @@ class ContestsController extends AbstractController {
 		if ( !$username ) {
 			throw new AccessDeniedHttpException();
 		}
+		$normalizedUsername = self::normalizeUsername( $username );
+
 		if ( !$this->isCsrfTokenValid( 'contest-edit', $request->request->get( 'csrf_token' ) ) ) {
 			throw new AccessDeniedHttpException();
 		}
@@ -250,13 +251,13 @@ class ContestsController extends AbstractController {
 			}
 		}
 
-		$admins = array_map(
+		$admins = array_filter( array_map(
 			[ self::class, 'normalizeUsername' ],
-			array_filter( Str::explode( $request->request->get( 'admins', '' ) ) )
-		);
-		if ( !in_array( self::normalizeUsername( $username ), $admins ) ) {
+			Str::explode( $request->request->get( 'admins', '' ) )
+		) );
+		if ( !in_array( $normalizedUsername, $admins ) ) {
 			// Make sure the current user is always an admin, so they can't lock themselves out.
-			$admins[] = self::normalizeUsername( $username );
+			$admins[] = $normalizedUsername;
 		}
 
 		$indexPageUrls = array_map( 'urldecode', Str::explode( $request->request->get( 'index_pages' ) ) );
