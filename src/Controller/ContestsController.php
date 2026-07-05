@@ -250,10 +250,10 @@ class ContestsController extends AbstractController {
 			}
 		}
 
-		$admins = array_map(
-			[ self::class, 'normalizeUsername' ],
-			array_filter( Str::explode( $request->request->get( 'admins', '' ) ) )
-		);
+		$admins = array_filter( array_map(
+			$this->normalizeUsername(...),
+			Str::explode( $request->request->get( 'admins', '' ) )
+		) );
 		if ( !in_array( self::normalizeUsername( $username ), $admins ) ) {
 			// Make sure the current user is always an admin, so they can't lock themselves out.
 			$admins[] = self::normalizeUsername( $username );
