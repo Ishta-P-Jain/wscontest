@@ -145,7 +145,8 @@ class ContestsController extends AbstractController {
 			$isAdmin = false;
 			foreach ( $contest['admins'] as $admin ) {
 				$admins .= $admin['name'] . "\n";
-				$isAdmin = $isAdmin|| self::normalizeUsername( $admin['name'] ) === self::normalizeUsername( $username );
+				$isAdmin = $isAdmin
+					|| self::normalizeUsername( $admin['name'] ) === self::normalizeUsername( $username );
 			}
 			if ( !$isAdmin ) {
 				throw $this->createAccessDeniedException();
