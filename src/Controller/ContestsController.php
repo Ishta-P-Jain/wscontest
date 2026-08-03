@@ -93,7 +93,7 @@ class ContestsController extends AbstractController {
 		$username = $this->getLoggedInUsername( $session );
 
 		// If a user ID is requested, show only the scores for that user.
-		$userId = $request->get( 'u' );
+		$userId = $request->query->get( 'u' );
 		if ( $userId ) {
 			return $this->render( 'contests_viewuser.html.twig', [
 				'contest' => $contest,
